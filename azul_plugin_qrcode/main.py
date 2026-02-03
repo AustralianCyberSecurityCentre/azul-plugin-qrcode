@@ -69,7 +69,6 @@ class AzulPluginQrcode(BinaryPlugin):
         data = decode(img)
         if len(data) > 0:
             for raw in data:
-
                 # Try to decode to utf-8
                 try:
                     decoded_data = raw.data.decode("utf-8")
@@ -114,7 +113,6 @@ class AzulPluginQrcode(BinaryPlugin):
         # office files are really just zip archives
         try:
             with zipfile.ZipFile(path, "r") as zip:
-
                 # Images are stored in 'word/media' inside the archive
                 paths = ("word/media/", "ppt/media/", "xl/media/", "media/")
                 image_files = [f for f in zip.namelist() if (f.startswith(paths))]
@@ -144,14 +142,13 @@ class AzulPluginQrcode(BinaryPlugin):
             if "cannot load this image" in str(e):
                 logger.error("azul_qr: OSError, couldn't load image")
             else:
-                raise OSError(f"auzl_qr: uncaught OSError converting image: {e}")
+                raise OSError(f"auzl_qr: uncaught OSError converting image: {e}") from e
 
     # look for more efficient why to process.
     def extract_images_from_pdf(self, path):
         """Given a pdf file extracts images."""
         try:
             with fitz.open(path) as pdf:
-
                 for xref in range(1, pdf.xref_length()):
                     try:
                         if self.images_processed >= 100:
@@ -178,7 +175,7 @@ class AzulPluginQrcode(BinaryPlugin):
             elif "cannot open encrypted document" in msg:
                 logger.error("The file is password-protected.")
             else:
-                raise RuntimeError(f"auzl_qr: uncaught error processing pdf: {e}")
+                raise RuntimeError(f"auzl_qr: uncaught error processing pdf: {e}") from e
         except UnidentifiedImageError:
             logger.error("auzl_qr: error processing office, can't open image")
         except OSError as e:
@@ -187,12 +184,11 @@ class AzulPluginQrcode(BinaryPlugin):
             elif "cannot load this image" in str(e):
                 logger.error("azul_qr: OSError, couldn't load image")
             else:
-                raise OSError(f"auzl_qr: uncaught OSError converting image: {e}")
+                raise OSError(f"auzl_qr: uncaught OSError converting image: {e}") from e
 
     def execute(self, job: Job):
         """Run the plugin."""
         self.images_processed = 0
-        self._event_main
 
         path = job.get_data().get_filepath()
         file_format = job.event.entity.datastreams[0].file_format
@@ -214,7 +210,7 @@ class AzulPluginQrcode(BinaryPlugin):
                 elif "cannot load this image" in str(e):
                     logger.error("azul_qr: OSError, couldn't load image")
                 else:
-                    raise OSError(f"auzl_qr: uncaught OSError converting image: {e}")
+                    raise OSError(f"auzl_qr: uncaught OSError converting image: {e}") from e
         else:
             # not able to identify the type, try various types
 
