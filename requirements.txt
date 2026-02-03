@@ -1,5 +1,0 @@
-azul-runner>=4.0.0
-pymupdf>=1.26.4
-Pillow
-pyzbar
-hexdump
