@@ -194,7 +194,9 @@ class AzulPluginQrcode(BinaryPlugin):
         file_format = job.event.entity.datastreams[0].file_format
 
         # based on the filetype run image extractors
-        if file_format in self.office_filetypes:
+        if file_format is None:
+            return State(State.Label.ERROR_EXCEPTION, "Expected file_format to be str, got None")
+        elif file_format in self.office_filetypes:
             return self.extract_images_from_office(path)
         elif file_format in self.pdf_filetypes:
             return self.extract_images_from_pdf(path)
