@@ -9,10 +9,8 @@ from azul_runner import (
     Event,
     EventData,
     EventParent,
-    Filepath,
     JobResult,
     State,
-    Uri,
 )
 from azul_runner.test_utils import test_template
 
